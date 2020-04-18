@@ -1,12 +1,12 @@
 import React from 'react';
-import './App.css';
+import Routes from './routes/index';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
-function App() {
-  return (
-    <div className="App">
-      <h1>Xxxxxx</h1>
-    </div>
-  );
-}
+const App = () => (
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <Routes />
+    </MuiPickersUtilsProvider>
+);
 
 export default App;
