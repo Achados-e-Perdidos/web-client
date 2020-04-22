@@ -14,12 +14,11 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
     buttonPublicar: {
-        background: 'linear-gradient(45deg,  rgba(34,126,34,1) 3.8%, rgba(99,162,17,1) 87.1%)',
+        backgroundColor: '#218002',
+        '&:hover': {
+            backgroundColor: '#3a8821'
+        },
         boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-    },
-    buttonCancelar: {
-        background: 'linear-gradient(45deg, #711f1c 0%, #b31217 51%, #dc0700 100%)',
-        boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .3)',
     },
 });
 
@@ -28,32 +27,37 @@ const FormItemRegister = () => {
     const classes = useStyles();
     const [ categoria, setCategoria ] = useState('');
 
-    const handleChangeCategoria = (event) => {
-        setCategoria(event.target.value);
+    const handleChangeCategoria = (e) => {
+        setCategoria(e.target.value);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("!oi")
     };
 
     return (
-        <form>
+        <form className="form form-register-item" autoComplete="off" method="post" onSubmit={handleSubmit}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <FormControl>
+                    <FormControl className="form-control">
                         <TextField variant="outlined" id="input-titulo" label="Título"/>
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                    <FormControl>
-                        <TextField multiline variant="outlined" id="input-descricao" label="Descrição"/>
+                    <FormControl className="form-control">
+                        <TextField multiline rows={4} variant="outlined" id="input-descricao" label="Descrição"/>
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                    <FormControl variant="outlined">
+                    <FormControl variant="outlined" className="form-control">
                         <InputLabel id="input-categoria-label">Categoria</InputLabel>
                         <Select
                             labelId="input-categoria-label"
                             id="input-categoria"
                             value={categoria}
                             onChange={handleChangeCategoria}
-                            autoWidth
+                            width="50%"
                             style={{width: 300}}
                             label="Categoria"
                         >
@@ -66,17 +70,22 @@ const FormItemRegister = () => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                    <FormControl>
+                    <FormControl className="form-control">
                         <DatePickerInput initialPickDate={new Date()} id={"data-achado-perdido"} label={"Data do Achado ou Perdido"} formatDate={'dd/MM/yyyy'} />
                     </FormControl>
                 </Grid>
+
             </Grid>
-            <Button variant="contained" color="primary" className={classes.buttonCancelar}>
-                Cancelar
-            </Button>
-            <Button variant="contained" color="primary" className={classes.buttonPublicar}>
-                Publicar
-            </Button>
+
+            <Grid container spacing={2} direction="row" justify="flex-end" alignItems="flex-end">
+                <Grid item>
+                    <Button type="submit" variant="contained" color="primary" className={classes.buttonPublicar}>
+                        Publicar
+                    </Button>
+                </Grid>
+            </Grid>
+            
+            
         </form>
 
     );
