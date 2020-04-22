@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
 import AppBar from '../../components/AppBar';
-import SimpleImageSlider from "react-simple-image-slider";
+
+import Typography from '@material-ui/core/Typography';
 
 const ItemDetails = (props) => {
 
@@ -21,39 +22,33 @@ const ItemDetails = (props) => {
         }
     }
 
-    const styleImage = {
-        backgroundSize: 'contain',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
-    }
-
-
-    const [ width, setWidth ] = useState(window.innerWidth);
-    const [ height, setHeight ] = useState((window.innerHeight / 2));
-
-    const calcularTamanhoSlider = () => {
-        setWidth(window.innerWidth);
-        setHeight((window.innerHeight / 2));
-    }
-
-    window.addEventListener('resize', calcularTamanhoSlider);
-
     return (
         <>
             <AppBar/>
+
+            <main className="p-8 p-32">
+                
+                <div className="wrapper side-wrapper">
+                    <Typography style={{ 'font-weight': "bold" }} variant="h4" component="h2">
+                        {data.titulo}
+                    </Typography>
+                    <span className="category">{data.categoria}</span>
+                    <p className="description">{data.descricao}</p>
+                    <span className="data-achado-perdido">{data.dataAchadoPerdido}</span>
+
+                    <p>{data.dataPostagem}</p>
+
+                </div>
+
+                <div className="user-wrapper">
+                    <p>{data.userDetalhes.nome}</p>
+                    <p>{data.userDetalhes.onde}</p>
+                </div>
+                
+            </main>
             
-            <SimpleImageSlider width={width} height={height} images={data.imagem} useGPURender={true} showNavs={(data.imagem.length > 1 ? true : false)} showBullets={false} style={styleImage} />
 
-            <h2>{data.titulo}</h2>
-            <p>{data.descricao}</p>
-            <p>{data.dataAchadoPerdido}</p>
-
-            <p>{data.categoria}</p>
-
-            <p>{data.dataPostagem}</p>
-
-            <p>{data.userDetalhes.nome}</p>
-            <p>{data.userDetalhes.onde}</p>
+            
             
         </>
     );

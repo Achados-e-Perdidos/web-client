@@ -8,7 +8,9 @@ const Home = (props) => {
     return (
         <>
             <AppBar/>
-            <FeedItens/>
+            <main className="p-8 pt-32">
+                <FeedItens/>
+            </main>
         </>
     );
 
