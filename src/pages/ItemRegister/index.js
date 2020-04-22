@@ -14,7 +14,7 @@ const ItemRegister = () => {
             <main className="p-8 pt-32">
                 <div className="welcome">
                     <Typography variant="h4" component="h2" >
-                        Cadastre um item
+                        O que você está publicando?
                     </Typography>
                 </div>
 

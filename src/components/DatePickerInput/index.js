@@ -14,6 +14,7 @@ const DatePickerInput = (props) => {
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
+                style={{width: 300}}
                 disableToolbar
                 variant="inline"
                 inputVariant="outlined"

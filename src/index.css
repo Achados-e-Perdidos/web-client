@@ -35,10 +35,11 @@ a {
     position: relative;
 }
 
-@media all and (min-width: 850px){
+@media all and (min-width: 768px){
     .content-wrapper{
         border: 1px solid #d2d2d2;
         padding: 30px;
+        max-width: 1200px;
     }
 }
 

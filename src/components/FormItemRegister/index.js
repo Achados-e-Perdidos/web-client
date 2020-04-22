@@ -16,7 +16,7 @@ const useStyles = makeStyles({
     buttonPublicar: {
         backgroundColor: '#218002',
         '&:hover': {
-            backgroundColor: '#3a8821'
+            backgroundColor: '#000000'
         },
         boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
     },
@@ -40,16 +40,6 @@ const FormItemRegister = () => {
         <form className="form form-register-item" autoComplete="off" method="post" onSubmit={handleSubmit}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <FormControl className="form-control">
-                        <TextField variant="outlined" id="input-titulo" label="Título"/>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                    <FormControl className="form-control">
-                        <TextField multiline rows={4} variant="outlined" id="input-descricao" label="Descrição"/>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12}>
                     <FormControl variant="outlined" className="form-control">
                         <InputLabel id="input-categoria-label">Categoria</InputLabel>
                         <Select
@@ -57,7 +47,6 @@ const FormItemRegister = () => {
                             id="input-categoria"
                             value={categoria}
                             onChange={handleChangeCategoria}
-                            width="50%"
                             style={{width: 300}}
                             label="Categoria"
                         >
@@ -67,6 +56,16 @@ const FormItemRegister = () => {
                             <MenuItem value={20}>Jóias e bijuterias</MenuItem>
                             <MenuItem value={10}>Relógio</MenuItem>
                         </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                    <FormControl className="form-control">
+                        <TextField variant="outlined" id="input-titulo" label="Título"/>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                    <FormControl className="form-control">
+                        <TextField multiline rows={4} variant="outlined" id="input-descricao" label="Descrição"/>
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
