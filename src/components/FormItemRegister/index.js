@@ -8,7 +8,12 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 
+import Fab from "@material-ui/core/Fab";
+import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate"
+
 import DatePickerInput from '../../components/DatePickerInput';
+
+import { cadastrarItem } from '../../services/api';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -26,14 +31,76 @@ const FormItemRegister = () => {
 
     const classes = useStyles();
     const [ categoria, setCategoria ] = useState('');
+    const [ categoriaError, setErrorCategoria ] = useState(false);
+    const [ titulo, setTitulo ] = useState('');
+    const [ tituloError, setErrorTitulo ] = useState(false);
+    const [ descricao, setDescricao ] = useState('');
+    const [ descricaoError, setErrorDescricao ] = useState(false);
+    const [ dataAchadoPerdido, setDataAchadoPerdido ] = useState('');
+    const [ dataAchadoPerdidoError, setErrorDataAchadoPerido ] = useState(false);
+    const [ imagem, setImage ] = useState('');
+    const [ imagemError, setErrorImage ] = useState(false);
 
     const handleChangeCategoria = (e) => {
         setCategoria(e.target.value);
     };
 
-    const handleSubmit = (e) => {
+    const handleChangeTitulo = (e) => {
+        setTitulo(e.target.value);
+    };
+
+    const handleChangeDescricao = (e) => {
+        setDescricao(e.target.value);
+    };
+
+    const handleChangeDataAchadoPerdido = (value) => {
+        setDataAchadoPerdido(value);
+    };
+    const handleChangeImagem = (e) => {
+        setCategoria(e.target.value);
+    };
+
+    const verificarCamposPrenchidos = () => {
+
+        let isValid = true;
+
+        if(!categoria || categoria === '' || categoria === undefined){
+            isValid = false;
+            setErrorCategoria(true);
+        } else { setErrorCategoria(false); }
+
+        if(!titulo || titulo === '' || titulo === undefined){
+            isValid = false;
+            setErrorTitulo(true);
+        } else { setErrorTitulo(false); }
+
+        if(!descricao || descricao === '' || descricao === undefined){
+            isValid = false;
+            setErrorDescricao(true);
+        } else { setErrorDescricao(false); }
+
+        if(!dataAchadoPerdido || dataAchadoPerdido === '' || dataAchadoPerdido === undefined){
+            isValid = false;
+            setErrorDataAchadoPerido(true);
+        } else { setErrorDataAchadoPerido(false); }
+
+        return isValid;
+    }
+
+    const handleSubmit = async (e) => {
+        
         e.preventDefault();
-        console.log("!oi")
+
+        //ADICIONAR O https://github.com/CodeSeven/toastr QUANDO DER TEMPO
+
+        const isCamposValidos = verificarCamposPrenchidos();
+        
+        if(isCamposValidos){
+            const request = await cadastrarItem({categoria, titulo, descricao, dataAchadoPerdido});
+            console.log(request);
+        }
+
+
     };
 
     return (
@@ -49,42 +116,57 @@ const FormItemRegister = () => {
                             onChange={handleChangeCategoria}
                             style={{width: 300}}
                             label="Categoria"
+                            error={categoriaError}
                         >
-                            <MenuItem value={30}>Chave</MenuItem>
-                            <MenuItem value={30}>Carteira</MenuItem>
-                            <MenuItem value={30}>Eletrônicos</MenuItem>
-                            <MenuItem value={20}>Jóias e bijuterias</MenuItem>
-                            <MenuItem value={10}>Relógio</MenuItem>
+                            <MenuItem value={1}>Chave</MenuItem>
+                            <MenuItem value={2}>Carteira</MenuItem>
+                            <MenuItem value={3}>Eletrônicos</MenuItem>
+                            <MenuItem value={4}>Jóias e bijuterias</MenuItem>
+                            <MenuItem value={5}>Relógio</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
                     <FormControl className="form-control">
-                        <TextField variant="outlined" id="input-titulo" label="Título"/>
+                        <TextField variant="outlined" id="input-titulo" label="Título" onChange={handleChangeTitulo} error={tituloError}/>
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
                     <FormControl className="form-control">
-                        <TextField multiline rows={4} variant="outlined" id="input-descricao" label="Descrição"/>
+                        <TextField multiline rows={4} variant="outlined" id="input-descricao" label="Descrição" onChange={handleChangeDescricao} error={descricaoError}/>
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
                     <FormControl className="form-control">
-                        <DatePickerInput initialPickDate={new Date()} id={"data-achado-perdido"} label={"Data do Achado ou Perdido"} formatDate={'dd/MM/yyyy'} />
+                        <DatePickerInput disableFuture={true} handleChange={handleChangeDataAchadoPerdido} initialPickDate={new Date()} id={"data-achado-perdido"} label={"Data do Achado ou Perdido"} formatDate={'dd/MM/yyyy'} error={dataAchadoPerdidoError}/>
                     </FormControl>
                 </Grid>
-
+                <Grid item xs={12}>
+                    <p>Fotos</p>
+                    <p>Adicione até 6 fotos</p>
+                    <input
+                        accept="image/*"
+                        className={classes.input}
+                        id="contained-button-file"
+                        multiple
+                        type="file"
+                        onChange={() => { console.log('iuiuiui') }}
+                        style={{display: 'none'}}
+                    />
+                    <label htmlFor="contained-button-file">
+                        <Fab component="span" className={classes.button}>
+                            <AddPhotoAlternateIcon />
+                        </Fab>
+                    </label>
+                </Grid>
             </Grid>
-
             <Grid container spacing={2} direction="row" justify="flex-end" alignItems="flex-end">
                 <Grid item>
                     <Button type="submit" variant="contained" color="primary" className={classes.buttonPublicar}>
                         Publicar
                     </Button>
                 </Grid>
-            </Grid>
-            
-            
+            </Grid>            
         </form>
 
     );
