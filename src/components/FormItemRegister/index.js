@@ -17,6 +17,8 @@ import { cadastrarItem } from '../../services/api';
 
 import { makeStyles } from '@material-ui/core/styles';
 
+import { useToasts } from 'react-toast-notifications'
+
 const useStyles = makeStyles({
     buttonPublicar: {
         backgroundColor: '#218002',
@@ -28,6 +30,8 @@ const useStyles = makeStyles({
 });
 
 const FormItemRegister = () => {
+
+    const { addToast } = useToasts();
 
     const classes = useStyles();
     const [ categoria, setCategoria ] = useState('');
@@ -98,6 +102,7 @@ const FormItemRegister = () => {
         if(isCamposValidos){
             const request = await cadastrarItem({categoria, titulo, descricao, dataAchadoPerdido});
             console.log(request);
+            addToast('Saved Successfully', { appearance: 'success' })
         }
 
 
