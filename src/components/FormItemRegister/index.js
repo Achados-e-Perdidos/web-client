@@ -17,7 +17,8 @@ import { cadastrarItem } from '../../services/api';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import { useToasts } from 'react-toast-notifications'
+import { useToasts } from 'react-toast-notifications';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles({
     buttonPublicar: {
@@ -32,8 +33,9 @@ const useStyles = makeStyles({
 const FormItemRegister = () => {
 
     const { addToast } = useToasts();
-
+    const history = useHistory();
     const classes = useStyles();
+
     const [ categoria, setCategoria ] = useState('');
     const [ categoriaError, setErrorCategoria ] = useState(false);
     const [ titulo, setTitulo ] = useState('');
@@ -95,16 +97,17 @@ const FormItemRegister = () => {
         
         e.preventDefault();
 
-        //ADICIONAR O https://github.com/CodeSeven/toastr QUANDO DER TEMPO
-
         const isCamposValidos = verificarCamposPrenchidos();
         
         if(isCamposValidos){
             const request = await cadastrarItem({categoria, titulo, descricao, dataAchadoPerdido});
-            console.log(request);
-            addToast('Saved Successfully', { appearance: 'success' })
+            (request.status === 200) ? addToast(request.data.message, { appearance: 'success' }) : addToast(request.data.message, { appearance: 'error' });
+            setTimeout(()=> { 
+                history.push("/");
+            }, 1000);
+        } else {
+            addToast('Preencha todos os campos obrigatórios!', { appearance: 'error' });
         }
-
 
     };
 

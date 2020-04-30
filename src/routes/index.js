@@ -26,7 +26,7 @@ export default function Routes() {
         <Switch>
             <PrivateRoute exact path='/teste' component={Home}/>
             <Route exact path='/' component={Home}/>
-            <Route exact path='/item/detail' component={ItemDetails}/>
+            <Route exact path='/item/detail/:id' component={ItemDetails}/>
             <Route exact path='/item/register' component={ItemRegister}/>
             <Route exact path='/login' component={Login}/>
             <Route exact path='/register' component={Register}/>

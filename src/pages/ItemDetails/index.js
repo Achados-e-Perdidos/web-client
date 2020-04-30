@@ -1,12 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import AppBar from '../../components/AppBar';
 import SlideImages from '../../components/SlideImages';
 
 import Typography from '@material-ui/core/Typography';
 
+import { buscarItemPorID } from '../../services/api'
+
+
 const ItemDetails = (props) => {
 
+    const idItem = (props.location.state ? props.location.state.id : props.match.params.id);
+
+    const [ data, setData ] = useState({});
+
+    const carregarItem = async () => {
+        let { data } = await buscarItemPorID(idItem);
+        setData(data.data)
+    }
+
+    useEffect(() =>{
+        carregarItem();
+    }, [])
+
+    useEffect(() =>{
+        console.log(data)
+    }, [data])
+
+    /*
     const data = {
         imagens: [
             { url: "https://assets.xtechcommerce.com/uploads/images/medium/8ac8dad59d37f0929db3cd26b379a6be.jpg" },
@@ -22,46 +43,55 @@ const ItemDetails = (props) => {
             onde: 'Porto Alegre'
         }
     }
+    */
 
     return (
         <>
             <AppBar/>
+            
 
             <main className="p-8 p-32">
 
-                <div className="main-wrapper">
-
-                    <div className="titulo-container">
-                        <Typography style={{ 'fontWeight': "bold" }} variant="h4" component="h2">
-                            {data.titulo}
-                        </Typography>
-                    </div>
-
-                    <div className="slide-container">
-                        <SlideImages images={data.imagens} />
-                    </div>
-
-                    <div className="descricao-container">
-                        <span className="categoria">{data.categoria}</span>
-                        <p className="descricao">{data.descricao}</p>
-                        <span className="data-achado-perdido">{data.dataAchadoPerdido}</span>
-                    </div>
-
-                </div>
+                { data._id ? <>
                 
-                <div className="wrapper-footer">
-                                        
-                    <div className="user-wrapper">
-                        <p>{data.userDetalhes.nome}</p>
-                        <p>{data.userDetalhes.onde}</p>
-                    </div>
+                    <div className="main-wrapper">
 
-                    <p>{data.dataPostagem}</p>
+                        <div className="titulo-container">
+                            <Typography style={{ 'fontWeight': "bold" }} variant="h4" component="h2">
+                                {data.titulo}
+                            </Typography>
+                        </div>
 
-                </div>
-                
-            </main>
-            
+                        <div className="slide-container">
+                            
+                        </div>
+
+                        <div className="descricao-container">
+                            <span className="categoria">{data.categoria}</span>
+                            <p className="descricao">{data.descricao}</p>
+                            <span className="data-achado-perdido">{data.dataAchadoPerdido}</span>
+                        </div>
+
+                        </div>
+
+                        <div className="wrapper-footer">
+                                            
+                        <div className="user-wrapper">
+                            <p>{data.userDetalhes?.nome}</p>
+                            <p>{data.userDetalhes?.onde}</p>
+                        </div>
+
+                        <p>{data.dataPostagem}</p>
+
+                        </div>
+
+                        
+                 </> 
+                 
+                 : null}
+
+</main>
+
         </>
     );
 
