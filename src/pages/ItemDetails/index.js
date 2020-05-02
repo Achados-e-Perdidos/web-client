@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import AppBar from '../../components/AppBar';
-import SlideImages from '../../components/SlideImages';
 
 import Typography from '@material-ui/core/Typography';
 
@@ -12,7 +11,7 @@ const ItemDetails = (props) => {
 
     const idItem = (props.location.state ? props.location.state.id : props.match.params.id);
 
-    const [ data, setData ] = useState({});
+    const [ data, setData ] = useState(undefined);
 
     const carregarItem = async () => {
         let { data } = await buscarItemPorID(idItem);
@@ -24,7 +23,6 @@ const ItemDetails = (props) => {
     }, [])
 
     useEffect(() =>{
-        console.log(data)
     }, [data])
 
     /*
@@ -52,7 +50,7 @@ const ItemDetails = (props) => {
 
             <main className="p-8 p-32">
 
-                { data._id ? <>
+                { data && data._id ? <>
                 
                     <div className="main-wrapper">
 

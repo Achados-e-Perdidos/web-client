@@ -7,7 +7,7 @@ import {
 
 const DatePickerInput = (props) => {
 
-    const { id, label, formatDate, initialPickDate, handleChange, error, disableFuture, disablePast } = props;
+    const { id, label, formatDate, initialPickDate, handleChange, error, disableFuture, disablePast, value } = props;
 
     const [selectedDate, setSelectedDate] = useState(initialPickDate);
     
@@ -17,8 +17,10 @@ const DatePickerInput = (props) => {
     }
 
     useEffect(() => {
-        handleChange(document.getElementById(`${id}`).value);
-    }, []);
+        if(value){
+            setSelectedDate(value)
+        }
+    }, [value]);
 
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>

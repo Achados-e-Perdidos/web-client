@@ -8,6 +8,7 @@ import Register from '../pages/Register';
 import Home from '../pages/Home';
 import ItemDetails from '../pages/ItemDetails';
 import ItemRegister from '../pages/ItemRegister';
+import ItemEdit from '../pages/ItemEdit';
 
 
 const PrivateRoute = ({component: Component, ...rest}) => (
@@ -26,6 +27,7 @@ export default function Routes() {
         <Switch>
             <PrivateRoute exact path='/teste' component={Home}/>
             <Route exact path='/' component={Home}/>
+            <Route exact path='/item/edit/:id' component={ItemEdit}/>
             <Route exact path='/item/detail/:id' component={ItemDetails}/>
             <Route exact path='/item/register' component={ItemRegister}/>
             <Route exact path='/login' component={Login}/>

@@ -28,12 +28,11 @@ const FeedItens = () => {
     }, [])
 
     useEffect(() =>{
-        console.log(data)
     }, [data])
     
     return (
         <div className={classes.root}>
-            <Grid container spacing={3} direction="row" justify="flex-start" alignItems="stretch" style={{maxWidth: 1600, margin: 'auto'}} >
+            <Grid container spacing={3} direction="row" justify="flex-start" alignItems="stretch" style={{maxWidth: 1600}} >
                 {
                     data.length ? 
                     <>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
@@ -13,7 +13,7 @@ import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate"
 
 import DatePickerInput from '../../components/DatePickerInput';
 
-import { cadastrarItem } from '../../services/api';
+import { cadastrarItem, atualizarItem } from '../../services/api';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -30,7 +30,9 @@ const useStyles = makeStyles({
     },
 });
 
-const FormItemRegister = () => {
+const FormItemRegister = (props) => {
+
+    const { dataEdit, idItem } = props;
 
     const { addToast } = useToasts();
     const history = useHistory();
@@ -100,7 +102,12 @@ const FormItemRegister = () => {
         const isCamposValidos = verificarCamposPrenchidos();
         
         if(isCamposValidos){
-            const request = await cadastrarItem({categoria, titulo, descricao, dataAchadoPerdido});
+            let request;
+            if(dataEdit._id && idItem){
+                request = await atualizarItem(idItem, {categoria, titulo, descricao, dataAchadoPerdido});
+            } else {
+                request = await cadastrarItem({categoria, titulo, descricao, dataAchadoPerdido});
+            }
             (request.status === 200) ? addToast(request.data.message, { appearance: 'success' }) : addToast(request.data.message, { appearance: 'error' });
             setTimeout(()=> { 
                 history.push("/");
@@ -110,6 +117,15 @@ const FormItemRegister = () => {
         }
 
     };
+
+    useEffect(() =>{
+        if(dataEdit && idItem){
+            setCategoria(dataEdit.categoria);
+            setTitulo(dataEdit.titulo);
+            setDescricao(dataEdit.descricao);
+            setDataAchadoPerdido(dataEdit.dataAchadoPerdido);
+        }
+    }, [dataEdit])
 
     return (
         <form className="form form-register-item" autoComplete="off" method="post" onSubmit={handleSubmit}>
@@ -136,17 +152,17 @@ const FormItemRegister = () => {
                 </Grid>
                 <Grid item xs={12}>
                     <FormControl className="form-control">
-                        <TextField variant="outlined" id="input-titulo" label="Título" onChange={handleChangeTitulo} error={tituloError}/>
+                        <TextField variant="outlined" id="input-titulo" label="Título" onChange={handleChangeTitulo} error={tituloError} value={titulo}/>
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
                     <FormControl className="form-control">
-                        <TextField multiline rows={4} variant="outlined" id="input-descricao" label="Descrição" onChange={handleChangeDescricao} error={descricaoError}/>
+                        <TextField multiline rows={4} variant="outlined" id="input-descricao" label="Descrição" onChange={handleChangeDescricao} error={descricaoError} value={descricao}/>
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
                     <FormControl className="form-control">
-                        <DatePickerInput disableFuture={true} handleChange={handleChangeDataAchadoPerdido} initialPickDate={new Date()} id={"data-achado-perdido"} label={"Data do Achado ou Perdido"} formatDate={'dd/MM/yyyy'} error={dataAchadoPerdidoError}/>
+                        <DatePickerInput disableFuture={true} handleChange={handleChangeDataAchadoPerdido} initialPickDate={new Date()} id={"data-achado-perdido"} value={dataAchadoPerdido} label={"Data do Achado ou Perdido"} formatDate={'dd/MM/yyyy'} error={dataAchadoPerdidoError}/>
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
