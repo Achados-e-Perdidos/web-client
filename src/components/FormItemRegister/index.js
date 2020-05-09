@@ -46,8 +46,9 @@ const FormItemRegister = (props) => {
     const [ descricaoError, setErrorDescricao ] = useState(false);
     const [ dataAchadoPerdido, setDataAchadoPerdido ] = useState('');
     const [ dataAchadoPerdidoError, setErrorDataAchadoPerido ] = useState(false);
-    const [ imagem, setImage ] = useState('');
-    const [ imagemError, setErrorImage ] = useState(false);
+    const [ imagens, setImagens ] = useState([]);
+    const [ imagensError, setErrorImagens ] = useState(false);
+    const [ imagensPreview, setImagensPreview ] = useState([]);
 
     const handleChangeCategoria = (e) => {
         setCategoria(e.target.value);
@@ -63,9 +64,6 @@ const FormItemRegister = (props) => {
 
     const handleChangeDataAchadoPerdido = (value) => {
         setDataAchadoPerdido(value);
-    };
-    const handleChangeImagem = (e) => {
-        setCategoria(e.target.value);
     };
 
     const verificarCamposPrenchidos = () => {
@@ -118,6 +116,40 @@ const FormItemRegister = (props) => {
 
     };
 
+    const handleFiles = (e) => {
+
+        const files = e.target.files;
+        let isValid = true;
+        if(files.length > 6){
+            isValid = false;
+            addToast('Máximo de 6 fotos por postagem', { appearance: 'error', autoDismiss: true });
+        }
+
+        let maxSize = 2 * 1024 * 1024;
+        for(let i= 0; i < files.length; i++){
+            if(files.item(i).size > (maxSize)){
+                isValid = false;
+                addToast('O tamanho da imagem deve ser menor que 2MB', { appearance: 'error', autoDismiss: true });
+                break;
+            };
+        }
+
+        if(isValid) {
+            setImagens(files);
+            for(let i= 0; i < files.length; i++){
+                let fr = new FileReader();
+                fr.onload = function(e) {
+                    setImagensPreview(valorAnterior => [...valorAnterior, this.result])
+                }
+                fr.readAsDataURL(files.item(i));
+            }
+            
+        }
+        
+        return isValid;
+
+    } 
+
     useEffect(() =>{
         if(dataEdit && idItem){
             setCategoria(dataEdit.categoria);
@@ -125,7 +157,11 @@ const FormItemRegister = (props) => {
             setDescricao(dataEdit.descricao);
             setDataAchadoPerdido(dataEdit.dataAchadoPerdido);
         }
-    }, [dataEdit])
+    }, [dataEdit]);
+
+    useEffect(() =>{
+        console.log(imagensPreview)
+    }, [imagensPreview]);
 
     return (
         <form className="form form-register-item" autoComplete="off" method="post" onSubmit={handleSubmit}>
@@ -166,22 +202,39 @@ const FormItemRegister = (props) => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                    <p>Fotos</p>
-                    <p>Adicione até 6 fotos</p>
+                    <label className="label-fotos">Fotos</label>
+                    <span className="span-label-fotos">Adicione até 6 fotos</span>
                     <input
                         accept="image/*"
                         className={classes.input}
                         id="contained-button-file"
                         multiple
                         type="file"
-                        onChange={() => { console.log('iuiuiui') }}
+                        onChange={handleFiles}
                         style={{display: 'none'}}
+                        multiple
+                        accept="image/x-png,image/gif,image/jpeg"
                     />
-                    <label htmlFor="contained-button-file">
-                        <Fab component="span" className={classes.button}>
-                            <AddPhotoAlternateIcon />
-                        </Fab>
-                    </label>
+                    <div className="wrapper-button-file">
+                        <label htmlFor="contained-button-file">
+                            <Fab component="span" className={classes.button}>
+                                <AddPhotoAlternateIcon />
+                            </Fab>
+                        </label>
+                    </div>
+
+                    {
+                        imagensPreview.length ? 
+                        <>
+                            {
+                                imagensPreview.map((imagemBase64, index) => (
+                                    <img key={`image-base-64-${index}`} src={imagemBase64}/>
+                                ))
+                            }
+                        </>
+                        : null
+                    }
+                    
                 </Grid>
             </Grid>
             <Grid container spacing={2} direction="row" justify="flex-end" alignItems="flex-end">

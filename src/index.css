@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
 
 a {
@@ -49,4 +50,16 @@ a {
 
 .input-achados-perdidos {
     width: 100%;
+}
+
+.label-fotos {
+    font-weight: 700;
+}
+.span-label-fotos {
+    display: block;
+    font-size: 12px;
+}
+
+.wrapper-button-file{
+    margin-top: 10px;
 }
