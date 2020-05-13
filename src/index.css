@@ -63,3 +63,23 @@ a {
 .wrapper-button-file{
     margin-top: 10px;
 }
+
+.wrapper-thumb-preview{
+    margin-top: 15px;
+    padding: 16px 8px;
+    border-radius: 4px;
+    background-color: #e8e8e8;
+    border: 1px solid #c1c1c1;
+}
+
+.container-button-delete{
+    margin-top: 10px;
+    text-align: center;
+}
+
+.mini-thumb-preview{
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    object-position: center;
+}

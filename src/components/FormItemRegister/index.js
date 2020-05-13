@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button';
 
 import Fab from "@material-ui/core/Fab";
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate"
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import DatePickerInput from '../../components/DatePickerInput';
 
@@ -20,6 +21,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useToasts } from 'react-toast-notifications';
 import { useHistory } from 'react-router-dom';
 
+import { format } from 'date-fns'
+
+
 const useStyles = makeStyles({
     buttonPublicar: {
         backgroundColor: '#218002',
@@ -27,7 +31,15 @@ const useStyles = makeStyles({
             backgroundColor: '#000000'
         },
         boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+        marginTop: '10px'
     },
+    buttonRemoverFotos: {
+        backgroundColor: '#de1212',
+        '&:hover': {
+            backgroundColor: '#000000'
+        },
+        boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    }
 });
 
 const FormItemRegister = (props) => {
@@ -44,10 +56,9 @@ const FormItemRegister = (props) => {
     const [ tituloError, setErrorTitulo ] = useState(false);
     const [ descricao, setDescricao ] = useState('');
     const [ descricaoError, setErrorDescricao ] = useState(false);
-    const [ dataAchadoPerdido, setDataAchadoPerdido ] = useState('');
+    const [ dataAchadoPerdido, setDataAchadoPerdido ] = useState(format(new Date(), 'dd/MM/yyyy'));
     const [ dataAchadoPerdidoError, setErrorDataAchadoPerido ] = useState(false);
     const [ imagens, setImagens ] = useState([]);
-    const [ imagensError, setErrorImagens ] = useState(false);
     const [ imagensPreview, setImagensPreview ] = useState([]);
 
     const handleChangeCategoria = (e) => {
@@ -63,7 +74,7 @@ const FormItemRegister = (props) => {
     };
 
     const handleChangeDataAchadoPerdido = (value) => {
-        setDataAchadoPerdido(value);
+        setDataAchadoPerdido(format(new Date(value), 'dd/MM/yyyy'));
     };
 
     const verificarCamposPrenchidos = () => {
@@ -98,13 +109,21 @@ const FormItemRegister = (props) => {
         e.preventDefault();
 
         const isCamposValidos = verificarCamposPrenchidos();
-        
+
         if(isCamposValidos){
             let request;
-            if(dataEdit._id && idItem){
+            if(dataEdit?._id && idItem){
                 request = await atualizarItem(idItem, {categoria, titulo, descricao, dataAchadoPerdido});
             } else {
-                request = await cadastrarItem({categoria, titulo, descricao, dataAchadoPerdido});
+                let formData = new FormData();
+                formData.append('categoria', categoria);
+                formData.append('titulo', titulo);
+                formData.append('descricao', descricao);
+                formData.append('dataAchadoPerdido', dataAchadoPerdido);
+                for(let i= 0; i < imagens.length; i++){
+                    formData.append('imagens', imagens[i]);
+                }
+                request = await cadastrarItem(formData);
             }
             (request.status === 200) ? addToast(request.data.message, { appearance: 'success' }) : addToast(request.data.message, { appearance: 'error' });
             setTimeout(()=> { 
@@ -143,12 +162,17 @@ const FormItemRegister = (props) => {
                 }
                 fr.readAsDataURL(files.item(i));
             }
+            setImagens(files)
             
         }
         
         return isValid;
 
     } 
+
+    const removeImagesUpload = () => {
+        setImagensPreview([]);
+    }
 
     useEffect(() =>{
         if(dataEdit && idItem){
@@ -159,9 +183,7 @@ const FormItemRegister = (props) => {
         }
     }, [dataEdit]);
 
-    useEffect(() =>{
-        console.log(imagensPreview)
-    }, [imagensPreview]);
+    useEffect(() =>{}, [imagensPreview]);
 
     return (
         <form className="form form-register-item" autoComplete="off" method="post" onSubmit={handleSubmit}>
@@ -224,14 +246,23 @@ const FormItemRegister = (props) => {
                     </div>
 
                     {
-                        imagensPreview.length ? 
-                        <>
-                            {
-                                imagensPreview.map((imagemBase64, index) => (
-                                    <img key={`image-base-64-${index}`} src={imagemBase64}/>
-                                ))
-                            }
-                        </>
+                        imagensPreview.length ?
+                        <div className="wrapper-thumb-preview">
+                            <Grid container spacing={1} direction="row" justify="center" alignItems="flex-start">
+                                {
+                                    imagensPreview.map((imagemBase64, index) => (
+                                        <Grid item key={`grid-mini-thumb-preview-${index}`}>
+                                            <img className="mini-thumb-preview" key={`image-base-64-${index}`} src={imagemBase64}/>
+                                        </Grid>
+                                    ))
+                                }
+                            </Grid>
+                            <div className="container-button-delete">
+                                <Button type="button" variant="contained" color="primary" className={classes.buttonRemoverFotos} onClick={removeImagesUpload}>
+                                    <DeleteIcon/> Remover fotos selecionadas
+                                </Button>
+                            </div>
+                        </div>
                         : null
                     }
                     

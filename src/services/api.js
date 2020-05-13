@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 export const cadastrarItem = async (data) => {
-    return await axios.post('http://localhost:5000/api/item/', data);
+    return await axios.post('http://localhost:5000/api/item/', data, {
+        headers: {'Content-Type': 'multipart/form-data' }
+    });
 }
 
 export const atualizarItem = async (id, data) => {
