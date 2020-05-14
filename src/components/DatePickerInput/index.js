@@ -11,7 +11,7 @@ const DatePickerInput = (props) => {
 
     const [selectedDate, setSelectedDate] = useState(initialPickDate);
     
-    const handleChangeDate = (value) => {
+    const handleChangeDate = (value, formated) => {
         setSelectedDate(value);
         handleChange(value)
     }

@@ -7,7 +7,9 @@ export const cadastrarItem = async (data) => {
 }
 
 export const atualizarItem = async (id, data) => {
-    return await axios.put(`http://localhost:5000/api/item/edit/${id}`, data);
+    return await axios.put(`http://localhost:5000/api/item/edit/${id}`, data, {
+        headers: {'Content-Type': 'multipart/form-data' }
+    });
 } 
 
 export const buscarTodosItens = async () => {

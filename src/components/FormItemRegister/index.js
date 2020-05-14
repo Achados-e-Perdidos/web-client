@@ -56,7 +56,7 @@ const FormItemRegister = (props) => {
     const [ tituloError, setErrorTitulo ] = useState(false);
     const [ descricao, setDescricao ] = useState('');
     const [ descricaoError, setErrorDescricao ] = useState(false);
-    const [ dataAchadoPerdido, setDataAchadoPerdido ] = useState(format(new Date(), 'dd/MM/yyyy'));
+    const [ dataAchadoPerdido, setDataAchadoPerdido ] = useState(new Date());
     const [ dataAchadoPerdidoError, setErrorDataAchadoPerido ] = useState(false);
     const [ imagens, setImagens ] = useState([]);
     const [ imagensPreview, setImagensPreview ] = useState([]);
@@ -74,7 +74,7 @@ const FormItemRegister = (props) => {
     };
 
     const handleChangeDataAchadoPerdido = (value) => {
-        setDataAchadoPerdido(format(new Date(value), 'dd/MM/yyyy'));
+        setDataAchadoPerdido(value);
     };
 
     const verificarCamposPrenchidos = () => {
@@ -111,18 +111,25 @@ const FormItemRegister = (props) => {
         const isCamposValidos = verificarCamposPrenchidos();
 
         if(isCamposValidos){
-            let request;
-            if(dataEdit?._id && idItem){
-                request = await atualizarItem(idItem, {categoria, titulo, descricao, dataAchadoPerdido});
+            let formData = new FormData();
+            formData.append('categoria', categoria);
+            formData.append('titulo', titulo);
+            formData.append('descricao', descricao);
+            formData.append('dataAchadoPerdido', dataAchadoPerdido);
+
+            if(imagens === null){
+                formData.append('imagens', null);
             } else {
-                let formData = new FormData();
-                formData.append('categoria', categoria);
-                formData.append('titulo', titulo);
-                formData.append('descricao', descricao);
-                formData.append('dataAchadoPerdido', dataAchadoPerdido);
                 for(let i= 0; i < imagens.length; i++){
                     formData.append('imagens', imagens[i]);
                 }
+            }
+            
+
+            let request;
+            if(dataEdit?._id && idItem){
+                request = await atualizarItem(idItem, formData);
+            } else {
                 request = await cadastrarItem(formData);
             }
             (request.status === 200) ? addToast(request.data.message, { appearance: 'success' }) : addToast(request.data.message, { appearance: 'error' });
@@ -136,6 +143,8 @@ const FormItemRegister = (props) => {
     };
 
     const handleFiles = (e) => {
+
+        setImagensPreview([]);
 
         const files = e.target.files;
         let isValid = true;
@@ -172,6 +181,7 @@ const FormItemRegister = (props) => {
 
     const removeImagesUpload = () => {
         setImagensPreview([]);
+        setImagens(null);
     }
 
     useEffect(() =>{
@@ -180,10 +190,11 @@ const FormItemRegister = (props) => {
             setTitulo(dataEdit.titulo);
             setDescricao(dataEdit.descricao);
             setDataAchadoPerdido(dataEdit.dataAchadoPerdido);
+            setImagensPreview(dataEdit.imagens);
         }
     }, [dataEdit]);
 
-    useEffect(() =>{}, [imagensPreview]);
+    useEffect(() =>{}, [imagensPreview, imagens]);
 
     return (
         <form className="form form-register-item" autoComplete="off" method="post" onSubmit={handleSubmit}>
@@ -271,7 +282,7 @@ const FormItemRegister = (props) => {
             <Grid container spacing={2} direction="row" justify="flex-end" alignItems="flex-end">
                 <Grid item>
                     <Button type="submit" variant="contained" color="primary" className={classes.buttonPublicar}>
-                        Publicar
+                        { dataEdit?._id && idItem ? 'Atualizar' : 'Publicar'}
                     </Button>
                 </Grid>
             </Grid>            
