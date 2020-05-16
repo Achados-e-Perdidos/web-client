@@ -13,14 +13,13 @@ const ItemDetails = (props) => {
 
     const [ data, setData ] = useState(undefined);
 
-    const carregarItem = async () => {
-        let { data } = await buscarItemPorID(idItem);
-        setData(data.data)
-    }
-
     useEffect(() =>{
+        const carregarItem = async () => {
+            let { data } = await buscarItemPorID(idItem);
+            setData(data.data)
+        }
         carregarItem();
-    }, [])
+    }, [idItem])
 
     useEffect(() =>{
     }, [data])
@@ -88,8 +87,7 @@ const ItemDetails = (props) => {
                  
                  : null}
 
-</main>
-
+            </main>
         </>
     );
 

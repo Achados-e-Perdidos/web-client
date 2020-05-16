@@ -23,7 +23,6 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 
 import { useToasts } from 'react-toast-notifications';
-import { useHistory } from 'react-router-dom';
 
 
 import { format } from 'date-fns';
@@ -38,7 +37,6 @@ export default function RecipeReviewCard(props) {
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const { addToast } = useToasts();
-  const history = useHistory();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);

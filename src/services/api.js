@@ -23,3 +23,7 @@ export const buscarItemPorID = async (id) => {
 export const desativarItem = async (id) => {
     return await axios.put(`http://localhost:5000/api/item/deactivate/${id}`);
 } 
+
+export const realizarLogin = async (data) => {
+    return await axios.post(`http://localhost:5000/api/login/`, data);
+} 

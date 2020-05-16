@@ -21,8 +21,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useToasts } from 'react-toast-notifications';
 import { useHistory } from 'react-router-dom';
 
-import { format } from 'date-fns'
-
 
 const useStyles = makeStyles({
     buttonPublicar: {
@@ -185,7 +183,7 @@ const FormItemRegister = (props) => {
     }
 
     useEffect(() =>{
-        if(dataEdit && idItem){
+        if(dataEdit){
             setCategoria(dataEdit.categoria);
             setTitulo(dataEdit.titulo);
             setDescricao(dataEdit.descricao);
@@ -245,8 +243,6 @@ const FormItemRegister = (props) => {
                         type="file"
                         onChange={handleFiles}
                         style={{display: 'none'}}
-                        multiple
-                        accept="image/x-png,image/gif,image/jpeg"
                     />
                     <div className="wrapper-button-file">
                         <label htmlFor="contained-button-file">
@@ -263,7 +259,7 @@ const FormItemRegister = (props) => {
                                 {
                                     imagensPreview.map((imagemBase64, index) => (
                                         <Grid item key={`grid-mini-thumb-preview-${index}`}>
-                                            <img className="mini-thumb-preview" key={`image-base-64-${index}`} src={imagemBase64}/>
+                                            <img className="mini-thumb-preview" alt={`Preview upload`} key={`image-base-64-${index}`} src={imagemBase64}/>
                                         </Grid>
                                     ))
                                 }

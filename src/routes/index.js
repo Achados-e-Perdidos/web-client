@@ -26,13 +26,13 @@ export default function Routes() {
       <BrowserRouter>
         <Switch>
             <PrivateRoute exact path='/teste' component={Home}/>
-            <Route exact path='/' component={Home}/>
-            <Route exact path='/item/edit/:id' component={ItemEdit}/>
-            <Route exact path='/item/detail/:id' component={ItemDetails}/>
-            <Route exact path='/item/register' component={ItemRegister}/>
+            <PrivateRoute exact path='/' component={Home}/>
+            <PrivateRoute exact path='/item/edit/:id' component={ItemEdit}/>
+            <PrivateRoute exact path='/item/detail/:id' component={ItemDetails}/>
+            <PrivateRoute exact path='/item/register' component={ItemRegister}/>
             <Route exact path='/login' component={Login}/>
             <Route exact path='/register' component={Register}/>
-            <Route exact path='*' component={Error}/>
+            <PrivateRoute exact path='*' component={Error}/>
         </Switch>
       </BrowserRouter>
     );
