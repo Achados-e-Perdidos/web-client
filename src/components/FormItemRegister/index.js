@@ -50,6 +50,8 @@ const FormItemRegister = (props) => {
 
     const [ categoria, setCategoria ] = useState('');
     const [ categoriaError, setErrorCategoria ] = useState(false);
+    const [ tipo, setTipo ] = useState('');
+    const [ tipoError, setErrorTipo ] = useState(false);
     const [ titulo, setTitulo ] = useState('');
     const [ tituloError, setErrorTitulo ] = useState(false);
     const [ descricao, setDescricao ] = useState('');
@@ -69,6 +71,10 @@ const FormItemRegister = (props) => {
 
     const handleChangeDescricao = (e) => {
         setDescricao(e.target.value);
+    };
+
+    const handleChangeTipo = (e) => {
+        setTipo(e.target.value);
     };
 
     const handleChangeDataAchadoPerdido = (value) => {
@@ -94,6 +100,11 @@ const FormItemRegister = (props) => {
             setErrorDescricao(true);
         } else { setErrorDescricao(false); }
 
+        if(!tipo || tipo === '' || tipo === undefined){
+            isValid = false;
+            setErrorTipo(true);
+        } else { setErrorTipo(false); }
+
         if(!dataAchadoPerdido || dataAchadoPerdido === '' || dataAchadoPerdido === undefined){
             isValid = false;
             setErrorDataAchadoPerido(true);
@@ -110,6 +121,7 @@ const FormItemRegister = (props) => {
 
         if(isCamposValidos){
             let formData = new FormData();
+            formData.append('tipo', tipo);
             formData.append('categoria', categoria);
             formData.append('titulo', titulo);
             formData.append('descricao', descricao);
@@ -184,6 +196,7 @@ const FormItemRegister = (props) => {
 
     useEffect(() =>{
         if(dataEdit){
+            setTipo(dataEdit.tipo);
             setCategoria(dataEdit.categoria);
             setTitulo(dataEdit.titulo);
             setDescricao(dataEdit.descricao);
@@ -192,11 +205,28 @@ const FormItemRegister = (props) => {
         }
     }, [dataEdit]);
 
-    useEffect(() =>{}, [imagensPreview, imagens]);
+    useEffect(() => {}, [imagensPreview, imagens]);
 
     return (
         <form className="form form-register-item" autoComplete="off" method="post" onSubmit={handleSubmit}>
             <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <FormControl variant="outlined" className="form-control">
+                        <InputLabel id="input-tipo-label">Tipo</InputLabel>
+                        <Select
+                            labelId="input-tipo-label"
+                            id="input-tipo"
+                            value={tipo}
+                            onChange={handleChangeTipo}
+                            style={{width: 300}}
+                            label="Tipo"
+                            error={tipoError}
+                        >
+                            <MenuItem value={1}>Achado</MenuItem>
+                            <MenuItem value={2}>Perdido</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
                 <Grid item xs={12}>
                     <FormControl variant="outlined" className="form-control">
                         <InputLabel id="input-categoria-label">Categoria</InputLabel>

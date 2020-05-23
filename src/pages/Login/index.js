@@ -19,6 +19,8 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { realizarLogin } from '../../services/api';
 
+import { Link } from 'react-router-dom'
+
 const useStyles = makeStyles({
     buttonLogin: {
         backgroundColor: '#218002',
@@ -144,14 +146,16 @@ const Login = (props) => {
                         </div>
                         <Grid container spacing={2} direction="row" justify="center" alignItems="center">
                             <Grid item>
-                                <Button type="submit" color="primary">
+                                <Button type="button" color="primary">
                                     Esqueci minha senha
                                 </Button>
                             </Grid>
                             <Grid item>
-                                <Button type="submit" color="primary">
-                                    Faça o seu cadastro
-                                </Button>
+                                <Link to={{pathname: "/register"}}>
+                                    <Button type="button" color="primary">
+                                        Faça o seu cadastro
+                                    </Button>
+                                </Link>
                             </Grid>
                         </Grid>
                     </main>

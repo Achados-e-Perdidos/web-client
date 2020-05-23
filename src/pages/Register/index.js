@@ -22,7 +22,8 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 
-import { realizarLogin } from '../../services/api';
+import { realizarCadastro } from '../../services/api';
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles({
     buttonLogin: {
@@ -34,6 +35,7 @@ const useStyles = makeStyles({
         marginTop: '10px'
     },
 });
+
 
 const Register = (props) => {
 
@@ -139,9 +141,9 @@ const Register = (props) => {
                 addToast("Confirme sua senha novamente.", { appearance: 'error' });
             } else { setConfirmPasswordError(false); }
 
-            //let request = await realizarLogin({ email: emailLogin, password: passwordLogin });
-            //(request.status === 200) ? localStorage.setItem('token', request.data.token) : addToast(request.data.message, { appearance: 'error' });
-            //history.push("/");
+            let request = await realizarCadastro({ email: emailLogin, password: passwordLogin, confirmPassword: confirmPasswordLogin, name: nameLogin, phone: phoneLogin, gender: genderLogin  });
+            (request.status === 200) ? localStorage.setItem('token', request.data.token) : addToast(request.data.message, { appearance: 'error' });
+            history.push("/");
         } else {
             addToast('Preencha todos os campos obrigatórios!', { appearance: 'error' });
         }
@@ -177,7 +179,7 @@ const Register = (props) => {
                                             country={'br'}
                                             value={phoneLogin}
                                             onChange={handlePhone}
-                                            required={true}
+                                            className={phoneError ? 'required' : null}
                                             />
                                         </FormControl>
                                     </Grid>
@@ -259,9 +261,11 @@ const Register = (props) => {
                         </div>
                         <Grid container spacing={2} direction="row" justify="center" alignItems="center">
                             <Grid item>
-                                <Button type="submit" color="primary">
-                                    Já tenho conta! Quero fazer login
-                                </Button>
+                                <Link to={{pathname: "/login"}}>
+                                    <Button type="submit" color="primary">
+                                        Já tenho conta! Quero fazer login
+                                    </Button>
+                                </Link>
                             </Grid>
                         </Grid>
                     </main>

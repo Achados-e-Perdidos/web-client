@@ -7,17 +7,23 @@ import { buscarItemPorID } from '../../services/api'
 
 import Typography from '@material-ui/core/Typography';
 
+import { useHistory } from 'react-router-dom';
+
 
 const ItemEdit = (props) => {
 
     const idItem = (props.location.state ? props.location.state.id : props.match.params.id);
-
+    const history = useHistory();
     const [ data, setData ] = useState(undefined);
 
     useEffect(() =>{
         const carregarItem = async () => {
-            let { data } = await buscarItemPorID(idItem);
-            setData(data.data)
+            let request = await buscarItemPorID(idItem);
+            if(request.status === 403){
+                history.push('/')
+            } else {
+                setData(data.data)
+            }
         }
         carregarItem();
     }, [idItem])
