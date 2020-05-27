@@ -1,15 +1,23 @@
 import axios from 'axios';
 
 export const cadastrarItem = async (data) => {
-    return await axios.post('http://localhost:5000/api/item/', data, {
+    try {
+        return await axios.post('http://localhost:5000/api/item/', data, {
         headers: {'Content-Type': 'multipart/form-data', token: localStorage.getItem('token') }
     });
+    } catch (err) {
+        return (err.response)
+    }
 }
 
 export const atualizarItem = async (id, data) => {
-    return await axios.put(`http://localhost:5000/api/item/edit/${id}`, data, {
+    try {
+        return await axios.put(`http://localhost:5000/api/item/edit/${id}`, data, {
         headers: {'Content-Type': 'multipart/form-data', token: localStorage.getItem('token') }
     });
+    } catch (err) {
+        return (err.response)
+    }
 } 
 
 export const buscarTodosItens = async () => {
@@ -33,13 +41,25 @@ export const buscarItemPorID = async (id) => {
 } 
 
 export const desativarItem = async (id) => {
-    return await axios.put(`http://localhost:5000/api/item/deactivate/${id}`);
+    try {
+        return await axios.put(`http://localhost:5000/api/item/deactivate/${id}`);
+    } catch (err) {
+        return (err.response)
+    }
 } 
 
 export const realizarLogin = async (data) => {
-    return await axios.post(`http://localhost:5000/api/login/`, data);
+    try {
+        return await axios.post(`http://localhost:5000/api/login/`, data);
+    } catch (err) {
+        return (err.response)
+    }
 }
 
 export const realizarCadastro = async (data) => {
-    return await axios.post(`http://localhost:5000/api/user/`, data);
+    try {
+        return await axios.post(`http://localhost:5000/api/user/`, data);
+    } catch (err) {
+        return (err.response)
+    }
 } 

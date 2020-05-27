@@ -142,10 +142,13 @@ const FormItemRegister = (props) => {
             } else {
                 request = await cadastrarItem(formData);
             }
-            (request.status === 200) ? addToast(request.data.message, { appearance: 'success' }) : addToast(request.data.message, { appearance: 'error' });
-            setTimeout(()=> { 
-                history.push("/");
-            }, 1000);
+            if(request.status === 200) {
+                addToast(request.data.message, { appearance: 'success' })
+                setTimeout(() => { history.push("/") }, 1000)
+            } else {
+                addToast(request.data.message, { appearance: 'error' });
+            }
+            
         } else {
             addToast('Preencha todos os campos obrigatórios!', { appearance: 'error' });
         }
