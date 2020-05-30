@@ -3,11 +3,9 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import ShareIcon from '@material-ui/icons/Share';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -21,25 +19,30 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
-
+import { makeStyles } from '@material-ui/core/styles';
 import { useToasts } from 'react-toast-notifications';
-
-
 import { format } from 'date-fns';
-
 import { desativarItem } from '../../services/api'
+import randomColor from 'random-color'
 
-export default function RecipeReviewCard(props) {
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: randomColor().hexString(),
+  },
+}));
+
+export default function CardItem(props) {
   const { data } = props;
-
   const theme = useTheme();
+  const classes = useStyles();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
   const { addToast } = useToasts();
-
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
+
+  const ARRAY_TIPO = ['Achado', 'Perdido'],
+    ARRAY_CATEGORIA = ['Chave', 'Carteira', 'Eletrônicos', 'Jóias e bijuterias', 'Relógio'];
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -74,53 +77,64 @@ export default function RecipeReviewCard(props) {
     }, 1000);
   }
 
+  const formatUserName = (name) => {
+    return name.match(/\b(\w)/g).join('');
+  }
+  console.log(data)
   return (
     <>
       <Card style={{height: '100%'}}>
         <CardHeader
-          avatar={<Avatar aria-label="recipe">R</Avatar>}
+          avatar={<Avatar aria-label="recipe" className={classes.root}>{formatUserName(data.user.name)}</Avatar>}
           action={<IconButton aria-label="settings" onClick={handleClick}><MoreVertIcon /></IconButton>}
           title={<Link to={{ pathname: `/item/detail/${data._id}`, state: { id: data._id } }}>{data.titulo}</Link>}
           subheader={format(new Date(data.createAt),'dd/MM/yyyy')}
         />
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <Link to={{ pathname: `/item/detail/${data._id}`, state: { id: data._id } }}>
-              <MenuItem onClick={handleClose}>Ver</MenuItem>
-            </Link>
-            <Link to={{ pathname: `/item/edit/${data._id}`, state: { id: data._id } }}>
-              <MenuItem onClick={handleClose}>Editar</MenuItem>
-            </Link>
-          
-            <MenuItem onClick={handleClickOpenDialog}>Desativar</MenuItem>
+          <>
+            {data.owner ? 
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}>
+                <Link to={{ pathname: `/item/detail/${data._id}`, state: { id: data._id } }}>
+                  <MenuItem onClick={handleClose}>Ver</MenuItem>
+                </Link>
+                <Link to={{ pathname: `/item/edit/${data._id}`, state: { id: data._id } }}>
+                  <MenuItem onClick={handleClose}>Editar</MenuItem>
+                </Link>
+                <MenuItem onClick={handleClickOpenDialog}>Desativar</MenuItem>
+              </Menu>
+            : null}
             
-          </Menu>
+          </>
         <Link to={{
           pathname: `/item/detail/${data._id}`,
           state: {
             id: data._id
           }
         }}>
-          <CardMedia
-            image="/static/images/cards/paella.jpg"
-            title="Paella dish"
-          />
+          <>
+            { data.imagens.length ? 
+              <CardMedia className="media-image"
+                image={data.imagens[0]}
+                title={data.titulo}
+              />
+            : 
+              null }
+          </>
+          
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">
               {formatDescription(data.descricao)}
             </Typography>
           </CardContent>
         </Link>
-        <CardActions disableSpacing>
-          <IconButton aria-label="share">
-            <ShareIcon />
-          </IconButton>
-        </CardActions>
+        <div className="card-footer-container">
+          <span className="badge tipo">#{ARRAY_TIPO[data.tipo]}</span>
+          <span className="badge categoria">#{ARRAY_CATEGORIA[data.categoria]}</span>
+        </div>
       </Card>    
 
       <Dialog

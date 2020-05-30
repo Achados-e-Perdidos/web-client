@@ -24,15 +24,14 @@ const FeedItens = () => {
     }
 
     useEffect(() =>{
-        carregarItens();
-    }, [])
-
-    useEffect(() =>{
+        if(!data.length){
+            carregarItens();
+        }
     }, [data])
     
     return (
         <div className={classes.root}>
-            <Grid container spacing={3} direction="row" justify="flex-start" alignItems="stretch" style={{maxWidth: 1600}} >
+            <Grid container spacing={3} direction="row" justify="flex-start" alignItems="stretch">
                 {
                     data.length ? 
                     <>

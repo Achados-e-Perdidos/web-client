@@ -22,7 +22,7 @@ const ItemEdit = (props) => {
             if(request.status === 403){
                 history.push('/')
             } else {
-                setData(data.data)
+                setData(request.data.data)
             }
         }
         carregarItem();

@@ -1,6 +1,9 @@
 import React from 'react';
 
 import AppBar from '../../components/AppBar';
+import Link from '@material-ui/core/Link';
+import Typography from '@material-ui/core/Typography';
+
 
 const Error = (props) => {
 
@@ -8,7 +11,15 @@ const Error = (props) => {
         <>
             <AppBar/>
             <main className="p-8 pt-32">
-                <h1>404</h1>
+                <Typography align="center" variant="h2">
+                    404
+                </Typography>
+                <Typography align="center" variant="h5">
+                    Página não encontrada!
+                </Typography>
+                <Typography align="center" variant="h6">
+                    <Link href="/">Ir para Página Inicial</Link>
+                </Typography>
             </main>
         </>
     );

@@ -225,8 +225,8 @@ const FormItemRegister = (props) => {
                             label="Tipo"
                             error={tipoError}
                         >
-                            <MenuItem value={1}>Achado</MenuItem>
-                            <MenuItem value={2}>Perdido</MenuItem>
+                            <MenuItem value={0}>Achado</MenuItem>
+                            <MenuItem value={1}>Perdido</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>
@@ -242,11 +242,11 @@ const FormItemRegister = (props) => {
                             label="Categoria"
                             error={categoriaError}
                         >
-                            <MenuItem value={1}>Chave</MenuItem>
-                            <MenuItem value={2}>Carteira</MenuItem>
-                            <MenuItem value={3}>Eletrônicos</MenuItem>
-                            <MenuItem value={4}>Jóias e bijuterias</MenuItem>
-                            <MenuItem value={5}>Relógio</MenuItem>
+                            <MenuItem value={0}>Chave</MenuItem>
+                            <MenuItem value={1}>Carteira</MenuItem>
+                            <MenuItem value={2}>Eletrônicos</MenuItem>
+                            <MenuItem value={3}>Jóias e bijuterias</MenuItem>
+                            <MenuItem value={4}>Relógio</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>
