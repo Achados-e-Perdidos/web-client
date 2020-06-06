@@ -58,7 +58,7 @@ const FormItemRegister = (props) => {
     const [ descricaoError, setErrorDescricao ] = useState(false);
     const [ dataAchadoPerdido, setDataAchadoPerdido ] = useState(new Date());
     const [ dataAchadoPerdidoError, setErrorDataAchadoPerido ] = useState(false);
-    const [ imagens, setImagens ] = useState([]);
+    const [ imagens, setImagens ] = useState(undefined);
     const [ imagensPreview, setImagensPreview ] = useState([]);
 
     const handleChangeCategoria = (e) => {
@@ -85,7 +85,7 @@ const FormItemRegister = (props) => {
 
         let isValid = true;
 
-        if(!categoria || categoria === '' || categoria === undefined){
+        if(categoria === '' || categoria === undefined){
             isValid = false;
             setErrorCategoria(true);
         } else { setErrorCategoria(false); }
@@ -100,7 +100,7 @@ const FormItemRegister = (props) => {
             setErrorDescricao(true);
         } else { setErrorDescricao(false); }
 
-        if(!tipo || tipo === '' || tipo === undefined){
+        if(tipo === '' || tipo === undefined){
             isValid = false;
             setErrorTipo(true);
         } else { setErrorTipo(false); }
@@ -127,8 +127,8 @@ const FormItemRegister = (props) => {
             formData.append('descricao', descricao);
             formData.append('dataAchadoPerdido', dataAchadoPerdido);
 
-            if(imagens === null){
-                formData.append('imagens', null);
+            if(imagens === undefined){
+                formData.append('imagens', undefined);
             } else {
                 for(let i= 0; i < imagens.length; i++){
                     formData.append('imagens', imagens[i]);
@@ -194,7 +194,7 @@ const FormItemRegister = (props) => {
 
     const removeImagesUpload = () => {
         setImagensPreview([]);
-        setImagens(null);
+        setImagens(undefined);
     }
 
     useEffect(() =>{
@@ -205,6 +205,7 @@ const FormItemRegister = (props) => {
             setDescricao(dataEdit.descricao);
             setDataAchadoPerdido(dataEdit.dataAchadoPerdido);
             setImagensPreview(dataEdit.imagens);
+            dataEdit.imagens.length ? setImagens(true) : setImagens(null);
         }
     }, [dataEdit]);
 

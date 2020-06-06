@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
 import AppBar from '../../components/AppBar';
-
+import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
-
+import { format, compareAsc } from 'date-fns'
 import { buscarItemPorID } from '../../services/api'
 
 
 const ItemDetails = (props) => {
 
     const idItem = (props.location.state ? props.location.state.id : props.match.params.id);
+    const ARRAY_TIPO = ['Achado', 'Perdido'],
+    ARRAY_CATEGORIA = ['Chave', 'Carteira', 'Eletrônicos', 'Jóias e bijuterias', 'Relógio'];
 
     const [ data, setData ] = useState(undefined);
 
@@ -22,25 +24,13 @@ const ItemDetails = (props) => {
     }, [idItem])
 
     useEffect(() =>{
+        console.log(data)
     }, [data])
 
-    /*
-    const data = {
-        imagens: [
-            { url: "https://assets.xtechcommerce.com/uploads/images/medium/8ac8dad59d37f0929db3cd26b379a6be.jpg" },
-            { url: "https://beariopreto.com.br/wp-content/uploads/2019/10/s-l16001.jpg" },
-        ],
-        titulo: 'Encontrei um relógio',
-        descricao: 'Mussum Ipsum, cacilds vidis litro abertis. A ordem dos tratores não altera o pão duris. Manduma pindureta quium dia nois paga. Suco de cevadiss deixa as pessoas mais interessantis. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis.',
-        dataAchadoPerdido: '18/04/2020',
-        categoria: 'Relógio',
-        dataPostagem: '17/04/2020',
-        userDetalhes: {
-            nome: 'João das Couves',
-            onde: 'Porto Alegre'
-        }
+    const formatDate = (date) => {
+        date = new Date(date)
+        return format(new Date(date), 'dd/MM/yyyy')
     }
-    */
 
     return (
         <>
@@ -48,45 +38,62 @@ const ItemDetails = (props) => {
             
 
             <main className="p-8 p-32">
+                    { data && data._id ? <>
+                        <Card className="card-detail">
+                            <div className="main-wrapper">
+                                
+                                <div className="titulo-container">
+                                    <div className="badge-container">
+                                        <span className="badge-detail">#{ARRAY_TIPO[data.tipo]}</span>
+                                        <span className="badge-detail">#{ARRAY_CATEGORIA[data.categoria]}</span>
+                                    </div>
+                                    <Typography style={{ 'fontWeight': "bold" }} variant="h4" component="h2">
+                                        {data.titulo}
+                                    </Typography>
+                                    <span className="data-achado-perdido">{formatDate(data.dataAchadoPerdido)}</span>
+                                </div>
 
-                { data && data._id ? <>
-                
-                    <div className="main-wrapper">
+                                <div className="descricao-container">
+                                    <p className="descricao">{data.descricao}</p>
+                                </div>
 
-                        <div className="titulo-container">
-                            <Typography style={{ 'fontWeight': "bold" }} variant="h4" component="h2">
-                                {data.titulo}
-                            </Typography>
-                        </div>
-
-                        <div className="slide-container">
-                            
-                        </div>
-
-                        <div className="descricao-container">
-                            <span className="categoria">{data.categoria}</span>
-                            <p className="descricao">{data.descricao}</p>
-                            <span className="data-achado-perdido">{data.dataAchadoPerdido}</span>
-                        </div>
-
-                        </div>
-
-                        <div className="wrapper-footer">
-                                            
-                        <div className="user-wrapper">
-                            <p>{data.userDetalhes?.nome}</p>
-                            <p>{data.userDetalhes?.onde}</p>
-                        </div>
-
-                        <p>{data.dataPostagem}</p>
-
-                        </div>
-
-                        
-                 </> 
-                 
-                 : null}
-
+                                <div className="slide-images-container">
+                                    { data && data.imagens ? 
+                                        <>
+                                            {
+                                                data.imagens.map((url, i) => (
+                                                    <div className="container-image" key={`container-image-${i}`}>
+                                                        <img className="image" src={url} alt={`Imagem ${i+1} de ${data.imagens.length}`} key={`image-${i}`}/>
+                                                    </div>
+                                                ))
+                                            }
+                                        </>
+                                    : null }
+                                </div>
+                            </div>
+                        </Card>
+                        <Card className="card-detail">
+                            <div className="user-wrapper">
+                                <div className="div">
+                                    <label className="label">Usuário que postou:</label>
+                                    <p className="text">{data.user?.name}</p>
+                                </div>
+                                <div className="div">
+                                    <label className="label">E-mail de quem postou:</label>
+                                    <p className="text">{data.user?.email}</p>
+                                </div>
+                                <div className="div">
+                                    <label className="label">Telefone de quem postou:</label>
+                                    <p className="text">+{data.user?.phone}</p>
+                                </div>
+                                <div className="div">
+                                    <label className="label">Data da postagem:</label>
+                                    <p className="text">{formatDate(data.createAt)}</p>
+                                </div>
+                            </div>
+                        </Card>
+                    </> 
+                    : null}
             </main>
         </>
     );
