@@ -43,7 +43,10 @@ const FeedItens = () => {
                             ))
                         }
                     </> 
-                    : <h1>CARREGANDO</h1>
+                    : 
+                    <div className="p-8">
+                        <h1>CARREGANDO</h1>
+                    </div>
                 }
                 
             </Grid>
