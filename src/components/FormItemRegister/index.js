@@ -134,7 +134,6 @@ const FormItemRegister = (props) => {
                     formData.append('imagens', imagens[i]);
                 }
             }
-            
 
             let request;
             if(dataEdit?._id && idItem){

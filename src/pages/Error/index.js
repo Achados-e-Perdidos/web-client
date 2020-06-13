@@ -10,7 +10,7 @@ const Error = (props) => {
     return (
         <>
             <AppBar/>
-            <main className="p-8 pt-32">
+            <main className="fixed-main-wrapper p-8 pt-32">
                 <Typography align="center" variant="h2">
                     404
                 </Typography>

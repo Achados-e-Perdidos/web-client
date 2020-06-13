@@ -80,7 +80,7 @@ export default function CardItem(props) {
   const formatUserName = (name) => {
     return name.match(/\b(\w)/g).join('');
   }
-  console.log(data)
+  
   return (
     <>
       <Card style={{height: '100%'}}>

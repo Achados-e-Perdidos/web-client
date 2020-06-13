@@ -154,7 +154,7 @@ const Register = (props) => {
             <>
                 <>
                     <AppBar />
-                    <main className="p-8 pt-32">
+                    <main className="fixed-main-wrapper p-8 pt-32">
                         <div className="welcome">
                             <Typography style={{ 'fontWeight': "bold" }} variant="h4" component="h2" >
                                 Faça o seu cadastro

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import AppBar from '../../components/AppBar';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
-import { format, compareAsc } from 'date-fns'
+import { format } from 'date-fns'
 import { buscarItemPorID } from '../../services/api'
 
 
@@ -37,7 +37,7 @@ const ItemDetails = (props) => {
             <AppBar/>
             
 
-            <main className="p-8 p-32">
+            <main className="fixed-main-wrapper p-8 p-32">
                     { data && data._id ? <>
                         <Card className="card-detail">
                             <div className="main-wrapper">
