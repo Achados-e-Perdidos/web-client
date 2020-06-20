@@ -226,6 +226,12 @@ a {
     padding-top: 30px;
 }
 
+@media all and (min-width: 768px){
+    .menu-panel{
+        max-width: 400px;
+    }
+}
+
 .menu-panel .div-form-control{
     margin-bottom: 30px;
 }
