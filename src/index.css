@@ -248,3 +248,41 @@ a {
 .menu-panel .div-form-control .half:nth-child(even){
     margin-left: 2.5%;
 }
+
+#div-input-query{
+    width: calc(100% - 56px) !important;
+}
+
+#div-input-query .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-formControl{
+    border-radius: 4px 0px 0px 4px;
+}
+
+#button-search{
+    cursor: pointer;
+    display: inline-block;
+    width: 56px;
+    height: 56px;
+    background: white;
+    border-radius: 0px 4px 4px 0px;
+    border: 1px solid rgba(0, 0, 0, 0.23);
+    transition: 0.3s;
+}
+
+#btn-filter {
+    cursor: pointer;
+    display: block;
+    width: 50%;
+    margin: auto;
+    text-align: center;
+    height: 50px;
+    font-size: 16px;
+    background: white;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.23);
+    transition: 0.3s;
+}
+
+#button-search:hover,
+#btn-filter:hover {
+    border: 1px solid rgba(26, 16, 16, 0.8);
+}

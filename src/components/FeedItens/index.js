@@ -5,6 +5,7 @@ import Card from '../ItemCard';
 import Grid from '@material-ui/core/Grid';
 
 import { buscarTodosItens } from '../../services/api'
+import { search } from '../../services/api'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,16 +19,58 @@ const FeedItens = () => {
 
     const [ data, setData ] = useState([]);
 
+    var getParams = function (url) {
+        var params = {};
+        var parser = document.createElement('a');
+        parser.href = url;
+        var query = parser.search.substring(1);
+        if(!query) {
+            return false;
+        }
+        var vars = query.split('&');
+
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split('=');
+            params[pair[0]] = decodeURIComponent(pair[1]);
+        }
+
+        return params;
+    };
+
     const carregarItens = async () => {
         let { data } = await buscarTodosItens();
         setData(data.data)
     }
 
+    const realizarBusca = async (busca) => {
+        if(busca.query){
+            let { data } = await search(false, busca.query);
+            if(!data.length) {
+                carregarItens();
+            } else {
+                setData(data);
+            }
+        } else {
+            let advanced = window.location.search
+            let { data } = await search(true, advanced);
+            if(!data.length) {
+                carregarItens();
+            } else {
+                setData(data);
+            }
+        }
+    }
+
     useEffect(() =>{
         if(!data.length){
-            carregarItens();
+            let busca = getParams(window.location.href);
+            if(busca){
+                realizarBusca(busca);
+            } else {
+                carregarItens();
+            }
         }
-    }, [data])
+    }, [data]);
     
     return (
         <div className={classes.root}>

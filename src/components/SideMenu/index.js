@@ -4,23 +4,32 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import DateFnsUtils from '@date-io/date-fns';
+import SearchIcon from '@material-ui/icons/Search';
 import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
+
+import format from 'date-fns/format';
+
+import { useToasts } from 'react-toast-notifications';
 
 export default function SideMenu(props) {
 
     const { onClose } = props;
 
+    const { addToast } = useToasts();
+
     const [heigth, setHeigth] = useState(0);
     const [width, setWidth] = useState(0);
 
+    const [tipoSearch, setTipoSearch] = useState('');
+    const [categoriaSearch, setCategoriaSearch] = useState('');
+    const [dataInicio, setDataInicio] = useState(null);
+    const [dataFim, setDataFim] = useState(null);
+    const [palavraSearch, setPalavraSearch] = useState('');
+
     const getMaxHeigth = () => {
         setHeigth((window.innerHeight - document.getElementById('div-menu-father').offsetHeight) - 20);
-        console.log(document.getElementById('div-menu-father').offsetHeight)
     }
 
     const getMaxWidth = () => {
@@ -31,10 +40,24 @@ export default function SideMenu(props) {
         }
     }
 
-    const [selectedDate, setSelectedDate] = React.useState(new Date());
+    const handleDataInicio = (date) => {
+        setDataInicio(date);
+    };
 
-    const handleDateChange = (date) => {
-        setSelectedDate(date);
+    const handleDataFim = (date) => {
+        setDataFim(date);
+    };
+
+    const handleTipo = (e) => {
+        setTipoSearch(e.target.value);
+    };
+
+    const handleCategoria = (e) => {
+        setCategoriaSearch(e.target.value);
+    };
+
+    const handlePalavra = (e) => {
+        setPalavraSearch(e.target.value);
     };
 
     const closeMenuPanel = (e) => {
@@ -43,10 +66,33 @@ export default function SideMenu(props) {
         }
     }
 
+    const buscaAvancada = () => {
+        if(tipoSearch === '' && categoriaSearch === '' && dataFim === '' && dataInicio === '' && palavraSearch === '') {
+            addToast('Preencha pelo menos um dos campos para filtrar', { appearance: 'error', autoDismiss: true });
+            return false;
+        }
+        let query = `palavrasChave=${palavraSearch}&tipo=${tipoSearch}&categoria=${categoriaSearch}&dataInicio=${dataInicio ? format(new Date(dataInicio), 'yyyy-MM-dd') : ''}&dataFim=${dataFim ? format(new Date(dataFim), 'yyyy-MM-dd') : ''}`
+        window.location.href = 'http://localhost:3000/?' + query //palavrasChave=teste&tipo=1&categoria=2&dataInicio&dataFim
+    }
+
+    const buscaSimples = () => {
+        if(!palavraSearch || palavraSearch === ''){
+            addToast('Preencha pelo menos uma palavra chave ou termo para buscar', { appearance: 'error', autoDismiss: true });
+            return false;
+        }
+        let query = encodeURIComponent(palavraSearch)
+        window.location.href = 'http://localhost:3000/?query=' + query
+    }
+
     useEffect(() => {
         getMaxHeigth();
         getMaxWidth();
     }, [width, heigth]);
+
+    window.addEventListener('resize', () => {
+        getMaxHeigth();
+        getMaxWidth();
+    });
 
     return (
         <div id="menu-mask-panel" onClick={closeMenuPanel}>
@@ -56,14 +102,12 @@ export default function SideMenu(props) {
                     <div>
                         <h3>Busque por alguma coisa</h3>
                         <div className="div-form-control">
-                            <FormControl className="form-control">
-                                <TextField variant="outlined" id="input-titulo" label="Palavra chave"/>
+                            <FormControl className="form-control" id="div-input-query">
+                                <TextField variant="outlined" id="input-query" label="Palavra chave" onChange={handlePalavra}/>
                             </FormControl>
-
-                            <button>
-                                Lupa
+                            <button id="button-search" onClick={buscaSimples}>
+                                <SearchIcon/>
                             </button>
-
                         </div>
                         
                     </div>
@@ -73,12 +117,14 @@ export default function SideMenu(props) {
                             <FormControl variant="outlined" className="form-control">
                                 <InputLabel id="input-tipo-label">Tipo</InputLabel>
                                 <Select
-                                    labelId="input-tipo-label"
-                                    id="input-tipo"
-                                    value={''}
+                                    labelId="search-tipo-label"
+                                    id="search-tipo"
+                                    value={tipoSearch}
+                                    onChange={handleTipo}
                                     label="Tipo"
                                     error={false}
                                 >
+                                    <MenuItem value={''} disabled={true}>Selecine uma opção</MenuItem>
                                     <MenuItem value={0}>Estrou procurando o que foi achado</MenuItem>
                                     <MenuItem value={1}>Estrou procurando o que foi perdido</MenuItem>
                                 </Select>
@@ -87,14 +133,16 @@ export default function SideMenu(props) {
 
                         <div className="div-form-control">
                             <FormControl variant="outlined" className="form-control">
-                                <InputLabel id="input-categoria-label">Categoria</InputLabel>
+                                <InputLabel id="search-categoria-label">Categoria</InputLabel>
                                 <Select
-                                    labelId="input-categoria-label"
-                                    id="input-categoria"
-                                    value={'x'}
+                                    labelId="search-categoria-label"
+                                    id="search-categoria"
+                                    value={categoriaSearch}
+                                    onChange={handleCategoria}
                                     label="Categoria"
                                     error={false}
                                 >
+                                    <MenuItem value={''} disabled={true}>Selecine uma opção</MenuItem>
                                     <MenuItem value={0}>Chave</MenuItem>
                                     <MenuItem value={1}>Carteira</MenuItem>
                                     <MenuItem value={2}>Eletrônicos</MenuItem>
@@ -112,10 +160,10 @@ export default function SideMenu(props) {
                                         variant="inline"
                                         format="dd/MM/yyyy"
                                         margin="normal"
-                                        id="date-picker-inline"
+                                        id="dataInicio-search"
                                         label="De"
-                                        value={selectedDate}
-                                        onChange={handleDateChange}
+                                        value={dataInicio}
+                                        onChange={handleDataInicio}
                                         KeyboardButtonProps={{
                                             'aria-label': 'change date',
                                         }}
@@ -130,10 +178,10 @@ export default function SideMenu(props) {
                                         variant="inline"
                                         format="dd/MM/yyyy"
                                         margin="normal"
-                                        id="date-picker-inline"
+                                        id="dataFim-search"
                                         label="Até"
-                                        value={selectedDate}
-                                        onChange={handleDateChange}
+                                        value={dataFim}
+                                        onChange={handleDataFim}
                                         KeyboardButtonProps={{
                                             'aria-label': 'change date',
                                         }}
@@ -144,8 +192,8 @@ export default function SideMenu(props) {
                         </div>
 
                         <div className="div-btn-busca-avancada">
-                            <button>
-                                Filtrar
+                            <button id="btn-filter" onClick={buscaAvancada}>
+                                Aplicar filtro avançado
                             </button>
                         </div>
                     </div>
