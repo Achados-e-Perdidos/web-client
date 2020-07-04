@@ -5,7 +5,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { ToastProvider } from 'react-toast-notifications'
 
 const App = () => (
-    <ToastProvider>
+    <ToastProvider placement={'bottom-right'}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Routes />
         </MuiPickersUtilsProvider>

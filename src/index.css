@@ -3,7 +3,7 @@
 }
 
 html {
-    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 body{
@@ -183,14 +183,14 @@ a {
 
 .slide-images-container .container-image{
     display: block;
-    width: calc(100% / 2 - 10px);
+    width: calc(100% / 3 - 10px);
     margin: 5px 5px;
     height: auto;
 }
 
 @media all and (min-width: 768px){
     .slide-images-container .container-image{
-        width: calc(100% / 3 - 10px);
+        width: calc(100% / 4 - 10px);
     }
 }
 
@@ -285,4 +285,33 @@ a {
 #button-search:hover,
 #btn-filter:hover {
     border: 1px solid rgba(26, 16, 16, 0.8);
+}
+
+#div-button-register{
+    display: block;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100000000000;
+}
+
+#div-button-register #button-register{
+    outline: none;
+    border-radius: 100%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #fff;
+    background: #000;
+    cursor: pointer;
+}
+
+#div-button-register #button-register .icon{
+    color: #fff !important;
+}
+#div-button-register #button-register span{
+    font-size: 16px;
+    color: #fff;
 }

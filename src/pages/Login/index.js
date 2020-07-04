@@ -83,10 +83,10 @@ const Login = (props) => {
 
         if(verificarCamposPrenchidos()){
             let request = await realizarLogin({email: emailLogin, password: senhaLogin});
-            (request.status === 200) ? localStorage.setItem('token', request.data.token) : addToast(request.data.message, { appearance: 'error' });
+            (request.status === 200) ? localStorage.setItem('token', request.data.token) : addToast(request.data.message, { appearance: 'error', placement: 'bottom-right' });
             history.push("/");
         } else {
-            addToast('Preencha todos os campos obrigatórios!', { appearance: 'error' });
+            addToast('Preencha todos os campos obrigatórios!', { appearance: 'error', placement: 'bottom-right' });
         }
     }
 

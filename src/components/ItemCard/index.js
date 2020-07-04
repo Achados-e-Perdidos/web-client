@@ -86,7 +86,7 @@ export default function CardItem(props) {
       <Card style={{height: '100%'}}>
         <CardHeader
           avatar={<Avatar aria-label="recipe" className={classes.root}>{formatUserName(data.user.name)}</Avatar>}
-          action={<IconButton aria-label="settings" onClick={handleClick}><MoreVertIcon /></IconButton>}
+          action={data.owner ? <IconButton aria-label="settings" onClick={handleClick}><MoreVertIcon /></IconButton> : null}
           title={<Link to={{ pathname: `/item/detail/${data._id}`, state: { id: data._id } }}>{data.titulo}</Link>}
           subheader={format(new Date(data.createAt),'dd/MM/yyyy')}
         />

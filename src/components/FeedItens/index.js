@@ -64,7 +64,15 @@ const FeedItens = () => {
     useEffect(() =>{
         if(!data.length){
             let busca = getParams(window.location.href);
-            if(busca){
+            let hasValues = false;
+            let keys = Object.keys(busca);
+            for (let i = 0; i < keys.length; i++) {
+                if(busca[keys[i]] != ""){
+                    hasValues = true; break
+                }
+            }
+
+            if(busca && hasValues){
                 realizarBusca(busca);
             } else {
                 carregarItens();
